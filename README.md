@@ -1,21 +1,15 @@
-# Next.js template
+# LendLoop
 
-This is a Next.js template with shadcn/ui.
+Borrow what you need. Lend what you don't.
 
-## Adding components
+> Setup, architecture, and security sections are written in Section 9 (see `docs/PLAN.md`).
 
-To add components to your app, run the following command:
+## Design decisions
 
-```bash
-npx shadcn@latest add button
-```
+### Roles are stored in Convex, not Clerk
 
-This will place the ui components in the `components` directory.
+User roles (`user` / `admin`) live in the Convex `users` table rather than in Clerk `publicMetadata`.
 
-## Using components
+This is a deliberate choice driven by how Convex works. Convex queries are reactive: when a row changes, every subscribed client gets the new data immediately, and every function call reads the current database state. If an admin is demoted, the change takes effect on their very next call and their open UI updates instantly. A role carried inside the Clerk JWT would stay valid until the token refreshes (about 60 seconds).
 
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
-```
+With a conventional backend (NestJS, Express, or another plain REST API), I would keep the role in Clerk `publicMetadata` and read it from the session token. That avoids a database lookup on every request, and the short refresh window is an acceptable trade-off there.
