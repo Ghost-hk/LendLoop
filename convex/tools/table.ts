@@ -12,4 +12,4 @@ export const tools = defineTable({
   removedBy: v.optional(v.id("users")),
 })
   .index("by_owner", ["ownerId"])
-  .index("by_category", ["category"])
+  .index("by_active_category", ["removedAt", "category"])

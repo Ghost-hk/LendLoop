@@ -15,5 +15,5 @@ export const loans = defineTable({
 })
   .index("by_borrower", ["borrowerId"])
   .index("by_lender", ["lenderId"])
-  .index("by_tool", ["toolId"])
+  .index("by_tool_status", ["toolId", "status"])
   .index("by_status_endDate", ["status", "endDate"])
