@@ -38,7 +38,7 @@ n8n "Error handler" (error workflow for both) ──▶ email admin + POST /n8n/
 - **Roles live in Convex** (`users.role`), not Clerk metadata. Reason in README → "Design decisions".
 - **Admin bootstrap**: internal mutation `users:setRole` run via Convex dashboard / `npx convex run`. Not callable from the client.
 - **User sync**: on sign-in the client calls `users.store` (upsert from verified JWT identity). Email/name come from the Clerk JWT template, never from client args.
-- **RBAC in one place**: `convex/lib/auth.ts` → `requireUser`, `requireAdmin`, `requireToolOwner`, `requireLoanParty`. Every public function starts with one of these.
+- **RBAC in one place**: `convex/lib/functions.ts` (`userQuery`/`userMutation`/`adminQuery`/`adminMutation` wrappers) + `convex/lib/access.ts` (`requireToolOwner`, `requireLoanParty`). See `docs/sections/02-data-model-rbac.md`.
 - **Loan state machine** enforced server-side:
   `requested → approved | declined | cancelled`, `approved → returned`.
   Lender approves/declines/marks returned; borrower cancels while `requested`. No overlapping approved loans per tool.

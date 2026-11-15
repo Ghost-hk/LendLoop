@@ -5,7 +5,7 @@ import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 
 export default function AppPage() {
-  const me = useQuery(api.users.current)
+  const me = useQuery(api.users.queries.current)
 
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-4 p-6">

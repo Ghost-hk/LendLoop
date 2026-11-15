@@ -10,7 +10,7 @@ const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
 
 function StoreUser() {
   const { isAuthenticated } = useConvexAuth()
-  const store = useMutation(api.users.store)
+  const store = useMutation(api.users.mutations.store)
 
   useEffect(() => {
     if (isAuthenticated) void store()
