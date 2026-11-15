@@ -41,3 +41,7 @@ next-env.d.ts
 
 # convex
 .convex/
+
+# impeccable working files (screenshots may contain personal data)
+.impeccable/review/
+.impeccable/build/

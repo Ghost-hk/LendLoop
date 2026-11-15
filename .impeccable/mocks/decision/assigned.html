@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>LendLoop · Street Signage</title>
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;700;800&family=Overpass+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;background:#ECEEE9;color:#15201A;font:16px/1.5 Overpass,system-ui,sans-serif}
+.bar{height:68px;background:#0B6B3A;display:flex;align-items:center;padding:0 40px;gap:40px}
+.blade{border:2px solid #fff;border-radius:6px;color:#fff;font-weight:800;letter-spacing:.06em;padding:4px 14px 2px;font-size:20px}
+.nav{display:flex;gap:4px;flex:1}
+.nav a{color:#DCEBE1;text-decoration:none;font-weight:600;padding:8px 14px;border-radius:6px;display:flex;align-items:center;gap:8px}
+.nav a.on{background:#fff;color:#0B6B3A}
+.dia{width:22px;height:22px;display:grid;place-items:center;font-size:11px;font-weight:800;color:#15201A;position:relative}
+.dia:before{content:"";position:absolute;inset:3px;background:#F2C200;border:1.5px solid #15201A;transform:rotate(45deg)}
+.dia span{position:relative}
+.me{width:36px;height:36px;border-radius:50%;background:#DCEBE1;color:#0B6B3A;display:grid;place-items:center;font-weight:800}
+main{padding:32px 40px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px}
+h1{font-size:32px;font-weight:800;letter-spacing:-.01em}
+.sub{color:#4A5A50}
+.btn{background:#0B6B3A;color:#fff;border:0;border-radius:6px;padding:10px 18px;font:700 15px Overpass}
+.chips{display:flex;gap:8px;margin-bottom:24px}
+.chip{border:1.5px solid #0B6B3A;color:#0B6B3A;background:#fff;border-radius:6px;padding:5px 12px 3px;font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.chip.on{background:#0B6B3A;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{background:#fff;border:1px solid #D3D8D0;border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:12px}
+.name{background:#0B6B3A;border-radius:6px;padding:3px}
+.name div{border:2px solid #fff;border-radius:4px;color:#fff;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:8px 12px 6px;font-size:18px}
+.meta{display:flex;justify-content:space-between;font-size:14px;color:#4A5A50}
+.owner{display:flex;align-items:center;gap:8px;font-size:15px}
+.trust{background:#1D57A5;color:#fff;font-weight:800;font-size:11px;letter-spacing:.08em;border-radius:4px;padding:3px 6px 1px;border:1.5px solid #fff;outline:1.5px solid #1D57A5}
+.status{display:flex;justify-content:space-between;align-items:center}
+.plate{font-weight:800;font-size:12px;letter-spacing:.08em;border-radius:4px;padding:4px 8px 2px;display:inline-flex;gap:6px;align-items:center}
+.ok{background:#0B6B3A;color:#fff}
+.out{background:#fff;color:#15201A;border:2px solid #15201A}
+.pend{background:#F2C200;color:#15201A}
+.date{font:500 13px "Overpass Mono",monospace;color:#4A5A50}
+.strip{display:grid;grid-template-columns:repeat(30,1fr);gap:2px;height:10px}
+.strip i{background:#E3E7E1;border-radius:1px}
+.strip i.b{background:#15201A}
+.strip i.p{background:#F2C200}
+.legend{display:flex;justify-content:space-between;font:500 11px "Overpass Mono",monospace;color:#6B7A70}
+.act{border:1.5px solid #0B6B3A;color:#0B6B3A;background:#fff;border-radius:6px;padding:8px;font:700 14px Overpass;text-align:center}
+.act.dim{border-color:#D3D8D0;color:#6B7A70}
+</style></head><body>
+<header class="bar"><div class="blade">LENDLOOP</div>
+<nav class="nav"><a class="on">Browse</a><a>My listings</a><a>My requests</a><a>Incoming <span class="dia"><span>2</span></span></a><a>Admin</a></nav>
+<div class="me">IB</div></header>
+<main>
+<div class="head"><div><h1>Browse tools</h1><p class="sub">24 tools on the board · 18 available today</p></div><button class="btn">+ List a tool</button></div>
+<div class="chips"><span class="chip on">All</span><span class="chip">Power tools</span><span class="chip">Hand tools</span><span class="chip">Garden</span><span class="chip">Kitchen</span><span class="chip">Camping</span><span class="chip">Cleaning</span><span class="chip">Ladders &amp; moving</span><span class="chip">Other</span></div>
+<div class="grid">
+<article class="card"><div class="name"><div>Cordless drill</div></div><div class="meta"><span>Power tools</span><span>Good</span></div><div class="owner">Alice T. <span class="trust">TRUSTED</span></div><div class="strip"><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="legend"><span>TODAY</span><span>+30 DAYS</span></div><div class="status"><span class="plate out">ON LOAN</span><span class="date">back Nov 18</span></div><div class="act">Request later dates</div></article>
+<article class="card"><div class="name"><div>Extension ladder</div></div><div class="meta"><span>Ladders &amp; moving</span><span>Like new</span></div><div class="owner">Omar K.</div><div class="strip"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="b"></i><i class="b"></i><i class="b"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="legend"><span>TODAY</span><span>+30 DAYS</span></div><div class="status"><span class="plate ok">AVAILABLE</span><span class="date">booked Nov 24–26</span></div><div class="act">Request to borrow</div></article>
+<article class="card"><div class="name"><div>Pressure washer</div></div><div class="meta"><span>Cleaning</span><span>Fair</span></div><div class="owner">Dana R. <span class="trust">TRUSTED</span></div><div class="strip"><i></i><i></i><i></i><i></i><i></i><i class="p"></i><i class="p"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="legend"><span>TODAY</span><span>+30 DAYS</span></div><div class="status"><span class="plate pend">◆ REQUEST PENDING</span><span class="date">Nov 20–21</span></div><div class="act dim">Waiting for Dana</div></article>
+<article class="card"><div class="name"><div>4-person tent</div></div><div class="meta"><span>Camping</span><span>Good</span></div><div class="owner">Sam P.</div><div class="strip"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="legend"><span>TODAY</span><span>+30 DAYS</span></div><div class="status"><span class="plate ok">AVAILABLE</span><span class="date">free next 30 days</span></div><div class="act">Request to borrow</div></article>
+<article class="card"><div class="name"><div>Hedge trimmer</div></div><div class="meta"><span>Garden</span><span>Worn</span></div><div class="owner">Lee M.</div><div class="status"><span class="plate ok">AVAILABLE</span><span class="date">free next 30 days</span></div></article>
+<article class="card"><div class="name"><div>Stand mixer</div></div><div class="meta"><span>Kitchen</span><span>Like new</span></div><div class="owner">You</div><div class="status"><span class="plate out">YOUR TOOL</span><span class="date">1 request</span></div></article>
+<article class="card"><div class="name"><div>Socket set</div></div><div class="meta"><span>Hand tools</span><span>Good</span></div><div class="owner">Alice T. <span class="trust">TRUSTED</span></div><div class="status"><span class="plate ok">AVAILABLE</span><span class="date">free next 30 days</span></div></article>
+<article class="card"><div class="name"><div>Tile cutter</div></div><div class="meta"><span>Hand tools</span><span>Fair</span></div><div class="owner">Priya N.</div><div class="status"><span class="plate out">ON LOAN</span><span class="date">back Nov 30</span></div></article>
+</div></main></body></html>

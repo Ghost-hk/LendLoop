@@ -20,6 +20,13 @@ export const ROLES = ["user", "admin"] as const
 
 export const LOAN_EVENTS = ["requested", "approved", "declined", "cancelled", "returned"] as const
 
+export const AUDIT_ACTIONS = [
+  "tool_removed",
+  "trusted_granted",
+  "trusted_revoked",
+  "role_changed",
+] as const
+
 export const LIMITS = {
   toolName: 80,
   toolDescription: 500,
@@ -33,6 +40,7 @@ export const conditionValidator = literals(...CONDITIONS)
 export const loanStatusValidator = literals(...LOAN_STATUSES)
 export const roleValidator = literals(...ROLES)
 export const loanEventValidator = literals(...LOAN_EVENTS)
+export const auditActionValidator = literals(...AUDIT_ACTIONS)
 
 export type Category = Infer<typeof categoryValidator>
 export type Condition = Infer<typeof conditionValidator>

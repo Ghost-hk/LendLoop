@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>LendLoop · Guide Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;background:#F5F1E4;color:#2C2E2A;font:600 16px/1.4 Archivo,system-ui,sans-serif;position:relative}
+.lobe{position:absolute;left:-120px;top:120px;width:1100px;height:900px;background:#8ED462;border-radius:48% 52% 40% 60%/55% 45% 55% 45%}
+.lobe2{position:absolute;right:-160px;top:-180px;width:520px;height:420px;background:#EBC1FF;border-radius:50% 50% 45% 55%/60% 40% 60% 40%}
+header{position:relative;display:flex;align-items:center;gap:28px;padding:24px 40px}
+.logo{font-size:30px;letter-spacing:-.06em;line-height:.95}
+nav{display:flex;gap:8px;flex:1}
+.cap{border-radius:999px;padding:8px 8px 8px 16px;display:inline-flex;align-items:center;gap:10px;background:#fff}
+.cap i{width:20px;height:20px;border-radius:50%;background:#2C2E2A;display:block}
+.cap.on{background:#F5E211}.cap.on i{order:-1}
+.cap.co{background:#FF705D;color:#2C2E2A}
+.cap.bl{background:#2BA0FF;color:#fff}.cap.bl i{background:#fff}
+main{position:relative;padding:20px 40px}
+h1{font-size:72px;letter-spacing:-.06em;line-height:.95;margin:40px 0 8px 40px}
+.sub{margin-left:44px;margin-bottom:24px}
+.chips{display:flex;gap:8px;margin:0 0 28px 40px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-left:40px;width:1240px}
+.card{background:#F5F1E4;border-radius:28px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.nm{font-size:24px;letter-spacing:-.04em;line-height:1}
+.meta{font-size:14px;opacity:.75}
+.row{display:flex;justify-content:space-between;align-items:center}
+</style></head><body>
+<div class="lobe"></div><div class="lobe2"></div>
+<header><div class="logo">Lend<br>Loop</div><nav><span class="cap on">Browse<i></i></span><span class="cap">My listings<i></i></span><span class="cap">My requests<i></i></span><span class="cap co">Incoming · 2<i></i></span><span class="cap">Admin<i></i></span></nav></header>
+<main>
+<h1>Browse the board</h1><p class="sub">24 tools · 18 free today</p>
+<div class="chips"><span class="cap on">All<i></i></span><span class="cap">Power tools<i></i></span><span class="cap">Garden<i></i></span><span class="cap">Kitchen<i></i></span><span class="cap">Camping<i></i></span><span class="cap">Cleaning<i></i></span></div>
+<div class="grid">
+<div class="card"><div class="nm">Cordless drill</div><div class="meta">Power tools · Good · Alice T. ✓ Trusted</div><div class="row"><span class="cap bl">On loan to Nov 18<i></i></span></div></div>
+<div class="card"><div class="nm">Extension ladder</div><div class="meta">Ladders · Like new · Omar K.</div><div class="row"><span class="cap on">Available<i></i></span></div></div>
+<div class="card"><div class="nm">Pressure washer</div><div class="meta">Cleaning · Fair · Dana R. ✓ Trusted</div><div class="row"><span class="cap co">Request pending<i></i></span></div></div>
+<div class="card"><div class="nm">4-person tent</div><div class="meta">Camping · Good · Sam P.</div><div class="row"><span class="cap on">Available<i></i></span></div></div>
+</div></main></body></html>

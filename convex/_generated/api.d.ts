@@ -10,6 +10,8 @@
 
 import type * as admin_mutations from "../admin/mutations.js";
 import type * as admin_queries from "../admin/queries.js";
+import type * as audit_helpers from "../audit/helpers.js";
+import type * as audit_table from "../audit/table.js";
 import type * as automation_events from "../automation/events.js";
 import type * as lib_access from "../lib/access.js";
 import type * as lib_dates from "../lib/dates.js";
@@ -39,6 +41,8 @@ import type {
 declare const fullApi: ApiFromModules<{
   "admin/mutations": typeof admin_mutations;
   "admin/queries": typeof admin_queries;
+  "audit/helpers": typeof audit_helpers;
+  "audit/table": typeof audit_table;
   "automation/events": typeof automation_events;
   "lib/access": typeof lib_access;
   "lib/dates": typeof lib_dates;

@@ -1,0 +1,477 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-15T23:33:29.295241+00:00",
+  "title": "Design System: LendLoop",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#f4f1ea",
+        "tonalRamp": [
+          "#0c0b09",
+          "#252420",
+          "#423f3a",
+          "#605d57",
+          "#83807a",
+          "#a7a49e",
+          "#cccac5",
+          "#f0eeeb"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1b1b1b",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#808080",
+          "#a4a4a4",
+          "#cacaca",
+          "#eeeeee"
+        ]
+      },
+      "hardboard": {
+        "role": "neutral",
+        "displayName": "Hardboard",
+        "canonical": "#c9a270",
+        "tonalRamp": [
+          "#140800",
+          "#341f00",
+          "#583800",
+          "#795624",
+          "#9e7947",
+          "#c49d6b",
+          "#e2c5a3",
+          "#fdecd6"
+        ]
+      },
+      "hardboard-hole": {
+        "role": "neutral",
+        "displayName": "Hardboard Hole",
+        "canonical": "#9e7a4d",
+        "tonalRamp": [
+          "#130900",
+          "#341f02",
+          "#583808",
+          "#785629",
+          "#9d794c",
+          "#c39d6f",
+          "#e1c6a5",
+          "#fdecd8"
+        ]
+      },
+      "kraft": {
+        "role": "neutral",
+        "displayName": "Kraft",
+        "canonical": "#e8d2a6",
+        "tonalRamp": [
+          "#100a01",
+          "#2e2208",
+          "#4f3d15",
+          "#6e5b32",
+          "#927d54",
+          "#b7a277",
+          "#d8c9ab",
+          "#f7eddb"
+        ]
+      },
+      "kraft-edge": {
+        "role": "neutral",
+        "displayName": "Kraft Edge",
+        "canonical": "#9e7a4d",
+        "tonalRamp": [
+          "#130900",
+          "#341f02",
+          "#583808",
+          "#785629",
+          "#9d794c",
+          "#c39d6f",
+          "#e1c6a5",
+          "#fdecd8"
+        ]
+      },
+      "safety": {
+        "role": "primary",
+        "displayName": "Safety Yellow",
+        "canonical": "#f4c20d",
+        "tonalRamp": [
+          "#170700",
+          "#3a1c00",
+          "#613400",
+          "#835400",
+          "#a87800",
+          "#ce9d00",
+          "#e9c76b",
+          "#ffedb8"
+        ]
+      },
+      "safety-pressed": {
+        "role": "primary",
+        "displayName": "Safety Pressed",
+        "canonical": "#e2b300",
+        "tonalRamp": [
+          "#160800",
+          "#391d00",
+          "#603500",
+          "#815500",
+          "#a67800",
+          "#cc9e00",
+          "#e7c770",
+          "#ffedbb"
+        ]
+      },
+      "tag-red": {
+        "role": "secondary",
+        "displayName": "Tag Red",
+        "canonical": "#d7262e",
+        "tonalRamp": [
+          "#260000",
+          "#570000",
+          "#8e0000",
+          "#b7000e",
+          "#e23438",
+          "#ff615c",
+          "#ffa299",
+          "#ffd8d0"
+        ]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Card White",
+        "canonical": "#fbf9f4",
+        "tonalRamp": [
+          "#0c0b0a",
+          "#252421",
+          "#41403c",
+          "#5f5d59",
+          "#82807c",
+          "#a6a4a0",
+          "#cccac7",
+          "#efeeec"
+        ]
+      },
+      "dust": {
+        "role": "neutral",
+        "displayName": "Dust",
+        "canonical": "#e9e3d6",
+        "tonalRamp": [
+          "#0d0b08",
+          "#27241d",
+          "#443f35",
+          "#625d52",
+          "#858074",
+          "#aaa498",
+          "#cecac1",
+          "#f1eee9"
+        ]
+      },
+      "muted-ink": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "#5c5548",
+        "tonalRamp": [
+          "#0d0b07",
+          "#28231b",
+          "#453f33",
+          "#645d50",
+          "#877f71",
+          "#aba495",
+          "#cfcabf",
+          "#f2eee7"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Border",
+        "canonical": "#d9d1c1",
+        "tonalRamp": [
+          "#0d0b07",
+          "#28231b",
+          "#453f32",
+          "#645d4f",
+          "#877f71",
+          "#aba494",
+          "#cfcabf",
+          "#f1eee7"
+        ]
+      },
+      "input-stroke": {
+        "role": "neutral",
+        "displayName": "Input Stroke",
+        "canonical": "#b9ae98",
+        "tonalRamp": [
+          "#0e0b05",
+          "#292317",
+          "#483f2c",
+          "#665c48",
+          "#897f6a",
+          "#aea38e",
+          "#d2caba",
+          "#f3eee4"
+        ]
+      },
+      "destructive": {
+        "role": "neutral",
+        "displayName": "Destructive",
+        "canonical": "#b4161e",
+        "tonalRamp": [
+          "#240000",
+          "#530000",
+          "#870000",
+          "#af0d1a",
+          "#da433f",
+          "#ff6b63",
+          "#ffa79d",
+          "#ffdbd2"
+        ]
+      },
+      "rail-hover": {
+        "role": "neutral",
+        "displayName": "Rail Hover",
+        "canonical": "#2e2c28",
+        "tonalRamp": [
+          "#0c0b0a",
+          "#252421",
+          "#423f3b",
+          "#605d59",
+          "#82807b",
+          "#a7a49f",
+          "#cccac7",
+          "#efeeec"
+        ]
+      },
+      "rail-border": {
+        "role": "neutral",
+        "displayName": "Rail Border",
+        "canonical": "#34322d",
+        "tonalRamp": [
+          "#0c0b09",
+          "#252421",
+          "#42403a",
+          "#605d58",
+          "#82807a",
+          "#a7a49e",
+          "#cccac6",
+          "#efeeeb"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Landing hero headline only; 3.75rem / 4.5rem sm / 6rem lg, Barlow Condensed 700 uppercase."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page titles (2.25rem / 3rem sm) and the landing How it works heading."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Tool names on tiles and loan rows, section headings, dialog titles (1.25 to 1.875rem)."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All running text at one size, 1rem / 1.5."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Category, condition, owner and date sublines at 0.875rem in muted ink."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Hang tags: 0.75rem bold uppercase, tabular numerals."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hanging-card",
+        "value": "0 2px 6px rgb(60 40 10 / 0.18)",
+        "purpose": "Home tool tiles and notes pinned on the pegboard."
+      },
+      {
+        "name": "pin",
+        "value": "0 1px 1px rgb(0 0 0 / 0.4)",
+        "purpose": "Ink pin dot at the top of app tool tiles."
+      }
+    ],
+    "motion": [
+      {
+        "name": "tile-state",
+        "value": "500ms ease-out (background-color, box-shadow, border-color)",
+        "purpose": "Tool tile moving between home and out."
+      },
+      {
+        "name": "glyph-state",
+        "value": "300ms (colors)",
+        "purpose": "Glyph panel switching between dust/ink and ink/safety."
+      },
+      {
+        "name": "control-state",
+        "value": "150ms (colors)",
+        "purpose": "Buttons, chips, nav items hover/active."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0.01ms",
+        "purpose": "All animation and transition durations under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Accent Button",
+      "kind": "button",
+      "refersTo": "button-accent",
+      "description": "Safety-yellow primary action, one per view.",
+      "html": "<button class=\"ds-btn-accent\">Hang a tool</button>",
+      "css": ".ds-btn-accent{font-family: var(--font-barlow, Barlow, sans-serif);height:40px;padding:0 16px;border:1px solid transparent;border-radius:0.5rem;background:var(--safety,#f4c20d);color:var(--ink,#1b1b1b);font-size:0.9375rem;font-weight:600;cursor:pointer;transition:background-color .15s,transform .1s}.ds-btn-accent:hover{background:#e2b300}.ds-btn-accent:focus-visible{outline:2px solid var(--ink,#1b1b1b);outline-offset:2px;box-shadow:0 0 0 3px rgb(27 27 27/.5)}.ds-btn-accent:active{transform:translateY(1px)}"
+    },
+    {
+      "name": "Ink Button",
+      "kind": "button",
+      "refersTo": "button-ink",
+      "description": "Ink fill with paper text; the per-tile Request to borrow.",
+      "html": "<button class=\"ds-btn-ink\">Request to borrow</button>",
+      "css": ".ds-btn-ink{font-family: var(--font-barlow, Barlow, sans-serif);height:40px;padding:0 16px;border:1px solid transparent;border-radius:0.5rem;background:var(--ink,#1b1b1b);color:var(--paper,#f4f1ea);font-size:0.9375rem;font-weight:600;cursor:pointer;transition:background-color .15s,transform .1s}.ds-btn-ink:hover{background:rgb(27 27 27/.85)}.ds-btn-ink:focus-visible{outline:2px solid var(--ink,#1b1b1b);outline-offset:2px}.ds-btn-ink:active{transform:translateY(1px)}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary actions: Manage, Cancel, Decline, Mark returned.",
+      "html": "<button class=\"ds-btn-outline\">Manage</button>",
+      "css": ".ds-btn-outline{font-family: var(--font-barlow, Barlow, sans-serif);height:40px;padding:0 16px;border:1px solid var(--border,#d9d1c1);border-radius:0.5rem;background:var(--paper,#f4f1ea);color:var(--ink,#1b1b1b);font-size:0.9375rem;font-weight:600;cursor:pointer;transition:background-color .15s}.ds-btn-outline:hover{background:var(--muted,#e9e3d6)}.ds-btn-outline:focus-visible{outline:2px solid var(--ink,#1b1b1b);outline-offset:2px}.ds-btn-outline:active{transform:translateY(1px)}"
+    },
+    {
+      "name": "Category Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Category filter pill; selected state inverts to ink.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">All</button><button class=\"ds-chip\" aria-pressed=\"false\">Power tools</button><button class=\"ds-chip\" aria-pressed=\"false\">Garden</button></div>",
+      "css": ".ds-chips{display:flex;gap:8px}.ds-chip{font-family: var(--font-barlow, Barlow, sans-serif);height:36px;padding:0 16px;border-radius:9999px;border:1px solid var(--input,#b9ae98);background:var(--card,#fbf9f4);color:var(--ink,#1b1b1b);font-size:0.875rem;font-weight:600;cursor:pointer;transition:border-color .15s,background-color .15s}.ds-chip:hover{border-color:var(--ink,#1b1b1b)}.ds-chip[aria-pressed=true]{background:var(--ink,#1b1b1b);border-color:var(--ink,#1b1b1b);color:var(--paper,#f4f1ea)}.ds-chip:focus-visible{outline:2px solid var(--ink,#1b1b1b);outline-offset:2px}"
+    },
+    {
+      "name": "Hang Tags",
+      "kind": "custom",
+      "refersTo": "hang-tag-home",
+      "description": "Kraft-style status tags with a punched hole; one variant per loan state.",
+      "html": "<div class=\"ds-tags\"><span class=\"ds-tag ds-tag-home\">On the wall</span><span class=\"ds-tag ds-tag-out\">Out · back Nov 17</span><span class=\"ds-tag ds-tag-pending\">Request sent</span><span class=\"ds-tag ds-tag-overdue\">Overdue 2 days</span><span class=\"ds-tag ds-tag-yours\">Yours</span><span class=\"ds-tag ds-tag-done\">Returned</span></div>",
+      "css": ".ds-tags{display:flex;flex-wrap:wrap;gap:8px}.ds-tag{font-family: var(--font-barlow, Barlow, sans-serif);position:relative;display:inline-flex;align-items:center;height:28px;padding:2px 12px 2px 20px;border:1px solid;border-radius:3px 0.7rem 0.7rem 3px;font-size:0.75rem;font-weight:700;letter-spacing:0.025em;text-transform:uppercase;font-variant-numeric:tabular-nums;box-sizing:border-box}.ds-tag::before{content:'';position:absolute;top:50%;left:6px;width:6px;height:6px;transform:translateY(-50%);border-radius:9999px;background:var(--paper,#f4f1ea);box-shadow:0 0 0 1px color-mix(in srgb,currentColor 40%,transparent)}.ds-tag-home{background:var(--kraft,#e8d2a6);color:var(--ink,#1b1b1b);border-color:var(--kraft-edge,#9e7a4d)}.ds-tag-out{background:var(--ink,#1b1b1b);color:var(--safety,#f4c20d);border-color:var(--ink,#1b1b1b)}.ds-tag-pending{background:var(--safety,#f4c20d);color:var(--ink,#1b1b1b);border-color:var(--ink,#1b1b1b)}.ds-tag-overdue{background:var(--tag-red,#d7262e);color:#fff;border-color:var(--tag-red,#d7262e)}.ds-tag-yours{background:var(--card,#fbf9f4);color:var(--ink,#1b1b1b);border-color:var(--ink,#1b1b1b)}.ds-tag-done{background:var(--secondary,#e9e3d6);color:var(--muted-foreground,#5c5548);border-color:var(--border,#d9d1c1)}"
+    },
+    {
+      "name": "Tool Tile on Pegboard",
+      "kind": "card",
+      "refersTo": "tool-tile",
+      "description": "Home tile (lifted, pinned) beside an out tile (dashed outline, dashed safety icon on ink).",
+      "html": "<div class=\"ds-peg\"><article class=\"ds-tile\"><span class=\"ds-pin\"></span><div class=\"ds-glyph\"><svg width=\"64\" height=\"64\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 2v20M17 2v20M7 6h10M7 10h10M7 14h10M7 18h10\"/></svg></div><h3 class=\"ds-tile-name\">Extension ladder</h3><p class=\"ds-meta\">Ladders &amp; moving · Like new</p><span class=\"ds-tag ds-tag-home\">On the wall</span><button class=\"ds-tile-btn\">Request to borrow</button></article><article class=\"ds-tile ds-tile-out\"><span class=\"ds-pin\"></span><div class=\"ds-glyph ds-glyph-out\"><svg width=\"64\" height=\"64\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 2v20M17 2v20M7 6h10M7 10h10M7 14h10M7 18h10\"/></svg></div><h3 class=\"ds-tile-name\">Step ladder</h3><p class=\"ds-meta\">Ladders &amp; moving · Good</p><span class=\"ds-tag ds-tag-out\">Out · back Nov 17</span></article></div>",
+      "css": ".ds-peg{font-family: var(--font-barlow, Barlow, sans-serif);display:grid;grid-template-columns:repeat(2,minmax(0,220px));gap:20px;padding:32px 24px 24px;border-radius:0.9rem;background-color:var(--hardboard,#c9a270);background-image:radial-gradient(var(--hardboard-hole,#9e7a4d) 2.5px,transparent 3px);background-size:24px 24px;background-position:12px 12px}.ds-tile{position:relative;display:flex;flex-direction:column;gap:8px;padding:12px;border:2px solid transparent;border-radius:0.7rem;background:var(--card,#fbf9f4);color:var(--ink,#1b1b1b);box-shadow:0 2px 6px rgb(60 40 10/.18);transition:background-color .5s ease-out,box-shadow .5s ease-out,border-color .5s ease-out}.ds-tile-out{border:2px dashed rgb(27 27 27/.7);background:rgb(244 241 234/.75);box-shadow:none}.ds-pin{position:absolute;top:-6px;left:50%;width:12px;height:12px;transform:translateX(-50%);border-radius:9999px;background:var(--ink,#1b1b1b);box-shadow:0 1px 1px rgb(0 0 0/.4)}.ds-glyph{display:grid;place-items:center;height:112px;border-radius:0.4rem;background:var(--secondary,#e9e3d6);color:var(--ink,#1b1b1b)}.ds-glyph-out{background:var(--ink,#1b1b1b);color:var(--safety,#f4c20d)}.ds-tile-name{margin:4px 4px 0;font-family: var(--font-condensed, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; line-height: 1.05;font-size:1.5rem}.ds-meta{margin:0 4px;font-size:0.875rem;color:var(--muted-foreground,#5c5548)}.ds-tile .ds-tag{margin:4px}.ds-tile-btn{font-family: var(--font-barlow, Barlow, sans-serif);height:40px;border:0;border-radius:0.5rem;background:var(--ink,#1b1b1b);color:var(--paper,#f4f1ea);font-weight:600;font-size:0.9375rem;cursor:pointer}.ds-tile-btn:hover{background:rgb(27 27 27/.85)}.ds-tile-btn:focus-visible{outline:2px solid var(--ink,#1b1b1b);outline-offset:2px}.ds-tag{position:relative;display:inline-flex;align-items:center;width:fit-content;height:28px;padding:2px 12px 2px 20px;border:1px solid;border-radius:3px 0.7rem 0.7rem 3px;font-size:0.75rem;font-weight:700;letter-spacing:0.025em;text-transform:uppercase;box-sizing:border-box}.ds-tag::before{content:'';position:absolute;top:50%;left:6px;width:6px;height:6px;transform:translateY(-50%);border-radius:9999px;background:var(--paper,#f4f1ea)}.ds-tag-home{background:var(--kraft,#e8d2a6);border-color:var(--kraft-edge,#9e7a4d)}.ds-tag-out{background:var(--ink,#1b1b1b);color:var(--safety,#f4c20d);border-color:var(--ink,#1b1b1b)}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Labelled form field as used in dialogs (40px).",
+      "html": "<label class=\"ds-field\"><span class=\"ds-label\">Name</span><input class=\"ds-input\" placeholder=\"Cordless drill\"></label>",
+      "css": ".ds-field{font-family: var(--font-barlow, Barlow, sans-serif);display:flex;flex-direction:column;gap:8px;max-width:320px;color:var(--ink,#1b1b1b)}.ds-label{font-size:0.875rem;font-weight:500}.ds-input{font-family: var(--font-barlow, Barlow, sans-serif);height:40px;padding:4px 10px;border:1px solid var(--input,#b9ae98);border-radius:0.5rem;background:transparent;color:var(--ink,#1b1b1b);font-size:0.875rem;outline:none;transition:border-color .15s,box-shadow .15s}.ds-input::placeholder{color:var(--muted-foreground,#5c5548)}.ds-input:focus-visible{border-color:var(--ink,#1b1b1b);box-shadow:0 0 0 3px rgb(27 27 27/.5)}"
+    },
+    {
+      "name": "Ink Rail Navigation",
+      "kind": "nav",
+      "refersTo": "nav-item-active",
+      "description": "Left rail with yellow wordmark, active safety item and tag-red count.",
+      "html": "<nav class=\"ds-rail\"><a class=\"ds-wordmark\" href=\"#\">LendLoop</a><a class=\"ds-nav ds-nav-active\" href=\"#\" aria-current=\"page\">Tool wall</a><a class=\"ds-nav\" href=\"#\">My listings</a><a class=\"ds-nav\" href=\"#\">My requests</a><a class=\"ds-nav\" href=\"#\"><span>Incoming</span><span class=\"ds-count\">2</span></a></nav>",
+      "css": ".ds-rail{font-family: var(--font-barlow, Barlow, sans-serif);display:flex;flex-direction:column;gap:4px;width:16rem;padding:24px 16px;background:var(--ink,#1b1b1b);box-sizing:border-box}.ds-wordmark{font-family: var(--font-condensed, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; line-height: 1.05;font-size:1.75rem;line-height:1;color:var(--safety,#f4c20d);text-decoration:none;padding:0 12px 28px}.ds-nav{display:flex;align-items:center;justify-content:space-between;height:44px;padding:0 12px;border-radius:0.4rem;color:#e9e3d6;font-weight:600;text-decoration:none;transition:background-color .15s,color .15s}.ds-nav:hover{background:#2e2c28;color:var(--paper,#f4f1ea)}.ds-nav:focus-visible{outline:2px solid var(--safety,#f4c20d);outline-offset:2px}.ds-nav-active,.ds-nav-active:hover{background:var(--safety,#f4c20d);color:var(--ink,#1b1b1b)}.ds-count{padding:0 8px;border-radius:9999px;background:var(--tag-red,#d7262e);color:#fff;font-size:0.75rem;line-height:20px;font-weight:700;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Trusted Mark",
+      "kind": "chip",
+      "refersTo": "trusted-mark",
+      "description": "Safety chip after a Trusted Lender's name.",
+      "html": "<span class=\"ds-owner\">Neighbor name <span class=\"ds-trusted\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z\"/><path d=\"m9 12 2 2 4-4\"/></svg>Trusted</span></span>",
+      "css": ".ds-owner{font-family: var(--font-barlow, Barlow, sans-serif);display:inline-flex;align-items:center;gap:8px;font-size:0.875rem;color:var(--ink,#1b1b1b)}.ds-trusted{display:inline-flex;align-items:center;gap:4px;padding:0 6px;border-radius:0.3rem;background:var(--safety,#f4c20d);color:var(--ink,#1b1b1b);font-size:0.75rem;line-height:20px;font-weight:700}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Shadow Board",
+    "overview": "LendLoop is a workshop pegboard shared by a street. Every listed tool hangs on a hardboard wall as a pinned card; when a tool goes out on loan, the card loses its lift and becomes a dashed outline, and its icon turns into a dashed safety-yellow stroke on ink, the painted silhouette left behind on a real shadow board. Status lives on kraft hang tags, not grey pills. The world is built from four shop materials (paper, ink, hardboard, kraft) and two signal colors (safety yellow, tag red), and nothing else.\n\nDensity is calm and practical: one body size, generous 40px+ controls, four tiles across at desktop, one column of horizontal tiles on phones. Titles and tool names shout in condensed uppercase like stencilled labels; everything else speaks in plain Barlow. The interface is light-only by decision (dark mode deferred), so the shadcn `dark:` classes still present in `components/ui` are inert.\n\nThe system rejects the neutral marketplace card grid with grey status pills. Pegboard texture belongs only behind tool walls (the wall, the public wall, the auth pages' backdrop), never as general decoration.",
+    "keyCharacteristics": [
+      "Paper ground, ink rail, hardboard pegboard behind tool walls only.",
+      "Safety yellow is a fill with ink text, used for the primary action, the active nav item, pending tags and the Trusted mark.",
+      "Tag red is reserved for overdue status and unread counts.",
+      "Home vs. out is shown by form (lifted solid card vs. dashed outline, solid vs. dashed icon stroke), never by color alone.",
+      "Kraft hang tags with a punched hole carry every status word.",
+      "Barlow Condensed uppercase for titles and tool names; Barlow for everything else."
+    ],
+    "rules": [
+      {
+        "name": "The Fill-Not-Text Rule",
+        "body": "Safety yellow is a background with ink text or a stroke on ink. It is never text on paper.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Signals Rule",
+        "body": "Only safety yellow and tag red signal. Yellow means \"act / pending / trusted\"; red means \"late / waiting count\". No other hue enters the UI.",
+        "section": "colors"
+      },
+      {
+        "name": "The Pegboard Is a Wall Rule",
+        "body": "The pegboard utility appears only behind collections of tools (wall, public wall) and as the auth-page backdrop. Lists, forms and admin tables sit on plain paper.",
+        "section": "colors"
+      },
+      {
+        "name": "The Condensed Means Name Rule",
+        "body": "Barlow Condensed uppercase is for titles and tool names only. Never set body copy, buttons or form labels in it.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Dates Rule",
+        "body": "Dates, counts and day lengths use tabular numerals (`tabular` utility) so rows line up.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lift Means Home Rule",
+        "body": "A shadow on a tool card means the tool is on the wall. Out tools lose the shadow and gain a dashed outline. Do not add shadows to anything that is not hanging on the pegboard.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** use safety yellow as a fill with ink text, one accent button per view.",
+      "**Do** show a tool's state by form first: lifted solid card for home, dashed outline and dashed safety-on-ink icon for out.",
+      "**Do** put every status word on a hang tag with the matching variant.",
+      "**Do** set titles and tool names with the `font-title` utility (Barlow Condensed 700 uppercase).",
+      "**Do** keep the pegboard behind tool collections and auth backdrops only.",
+      "**Do** use tabular numerals for dates and counts.",
+      "**Do** keep form fields and buttons at least 40px tall."
+    ],
+    "donts": [
+      "**Don't** ship grey status pills or a neutral marketplace card grid; status goes on hang tags.",
+      "**Don't** use tag red for anything except overdue status and waiting counts.",
+      "**Don't** set safety yellow as text on paper.",
+      "**Don't** add shadows to anything that is not hanging on the pegboard.",
+      "**Don't** introduce new hues beyond the paper, ink, hardboard, kraft, safety and tag-red family.",
+      "**Don't** add dark-mode styles until the dark theme is designed; the product is light-only."
+    ]
+  }
+}

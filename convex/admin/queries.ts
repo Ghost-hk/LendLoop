@@ -1,3 +1,4 @@
+import type { Id } from "../_generated/dataModel"
 import { adminQuery } from "../lib/functions"
 import { createLoanViewer } from "../loans/helpers"
 
@@ -31,6 +32,29 @@ export const users = adminQuery({
           activeListings: tools.filter((tool) => tool.removedAt === undefined).length,
         }
       }),
+    )
+  },
+})
+
+export const auditLog = adminQuery({
+  args: {},
+  handler: async (ctx) => {
+    const entries = await ctx.db.query("auditLog").order("desc").take(MAX_RESULTS)
+    const names = new Map<string, string>()
+    const nameOf = async (id: Id<"users"> | undefined) => {
+      if (!id) return null
+      if (!names.has(id)) names.set(id, (await ctx.db.get("users", id))?.name ?? "Former member")
+      return names.get(id)!
+    }
+    return await Promise.all(
+      entries.map(async (entry) => ({
+        _id: entry._id,
+        createdAt: entry._creationTime,
+        action: entry.action,
+        actor: (await nameOf(entry.actorId)) ?? "System",
+        subject: await nameOf(entry.subjectUserId),
+        detail: entry.detail,
+      })),
     )
   },
 })
