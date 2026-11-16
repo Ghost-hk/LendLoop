@@ -3,5 +3,6 @@ import { users } from "./users/table"
 import { tools } from "./tools/table"
 import { loans } from "./loans/table"
 import { auditLog } from "./audit/table"
+import { webhookDeliveries } from "./automation/table"
 
-export default defineSchema({ users, tools, loans, auditLog })
+export default defineSchema({ users, tools, loans, auditLog, webhookDeliveries })

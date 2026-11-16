@@ -1,0 +1,151 @@
+{
+  "name": "LendLoop \u00b7 Request notification",
+  "nodes": [
+    {
+      "id": "a1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "lendloop-notify",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lendloop-notify",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      }
+    },
+    {
+      "id": "a2",
+      "name": "Verify signature",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\nconst TOLERANCE_SECONDS = 300;\nconst secret = $env.N8N_WEBHOOK_SECRET;\nconst item = $input.first();\nconst headers = item.json.headers || {};\nconst raw = (await this.helpers.getBinaryDataBuffer(0, 'data')).toString('utf8');\n\nconst reject = (reason) => [{ json: { valid: false, reason } }];\n\nif (!secret) return reject('secret not configured');\nconst header = headers['x-lendloop-signature'] || '';\nconst parts = Object.fromEntries(header.split(',').map((p) => p.split('=', 2)));\nconst timestamp = Number(parts.t);\nif (!parts.v1 || !Number.isInteger(timestamp)) return reject('missing signature');\nif (Math.abs(Date.now() / 1000 - timestamp) > TOLERANCE_SECONDS) return reject('stale timestamp');\n\nconst expected = crypto.createHmac('sha256', secret).update(`${timestamp}.${raw}`).digest();\nconst given = Buffer.from(parts.v1, 'hex');\nif (given.length !== expected.length || !crypto.timingSafeEqual(given, expected)) return reject('bad signature');\n\nconst payload = JSON.parse(raw);\nif (headers['x-lendloop-delivery-id'] !== payload.deliveryId) return reject('delivery id mismatch');\n\nreturn [{ json: { valid: true, payload } }];\n"
+      }
+    },
+    {
+      "id": "a3",
+      "name": "Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a4",
+      "name": "Accept",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        660,
+        -100
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, deliveryId: $json.payload.deliveryId } }}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "a5",
+      "name": "Reject",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        660,
+        100
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: false, error: $json.reason } }}",
+        "options": {
+          "responseCode": 401
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Verify signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify signature": {
+      "main": [
+        [
+          {
+            "node": "Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valid?": {
+      "main": [
+        [
+          {
+            "node": "Accept",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reject",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "id": "lendloopNotify01"
+}
