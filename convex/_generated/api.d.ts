@@ -29,6 +29,7 @@ import type * as lib_dates from "../lib/dates.js";
 import type * as lib_errors from "../lib/errors.js";
 import type * as lib_functions from "../lib/functions.js";
 import type * as lib_input from "../lib/input.js";
+import type * as lib_rateLimits from "../lib/rateLimits.js";
 import type * as lib_validators from "../lib/validators.js";
 import type * as loans_helpers from "../loans/helpers.js";
 import type * as loans_mutations from "../loans/mutations.js";
@@ -72,6 +73,7 @@ declare const fullApi: ApiFromModules<{
   "lib/errors": typeof lib_errors;
   "lib/functions": typeof lib_functions;
   "lib/input": typeof lib_input;
+  "lib/rateLimits": typeof lib_rateLimits;
   "lib/validators": typeof lib_validators;
   "loans/helpers": typeof loans_helpers;
   "loans/mutations": typeof loans_mutations;
@@ -114,4 +116,6 @@ export declare const internal: FilterApi<
   FunctionReference<any, "internal">
 >;
 
-export declare const components: {};
+export declare const components: {
+  rateLimiter: import("@convex-dev/rate-limiter/_generated/component.js").ComponentApi<"rateLimiter">;
+};

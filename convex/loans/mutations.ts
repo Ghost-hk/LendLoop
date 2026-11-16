@@ -6,6 +6,7 @@ import { userMutation } from "../lib/functions"
 import { requireLoanParty } from "../lib/access"
 import { appError } from "../lib/errors"
 import { cleanText } from "../lib/input"
+import { enforceRateLimit } from "../lib/rateLimits"
 import { rangesOverlap, today, validateLoanDates } from "../lib/dates"
 import { LIMITS, type LoanStatus } from "../lib/validators"
 import { declineLoan, findApprovedOverlap, pendingLoansForTool } from "./helpers"
@@ -51,6 +52,8 @@ export const request = userMutation({
     if (alreadyPending) {
       throw appError("CONFLICT", "You already have a pending request for this tool.")
     }
+
+    await enforceRateLimit(ctx, "loanRequest", ctx.user._id)
 
     const cleanedNote = note ? cleanText(note, "Note", { max: LIMITS.loanNote, required: false }) : ""
 

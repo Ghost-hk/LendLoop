@@ -3,6 +3,7 @@ import { userMutation } from "../lib/functions"
 import { requireToolOwner } from "../lib/access"
 import { appError } from "../lib/errors"
 import { cleanText } from "../lib/input"
+import { enforceRateLimit } from "../lib/rateLimits"
 import { LIMITS, categoryValidator, conditionValidator } from "../lib/validators"
 import { approvedLoansForTool } from "../loans/helpers"
 import { retireTool } from "./helpers"
@@ -27,6 +28,7 @@ function cleanToolFields(fields: { name: string; description: string }) {
 export const create = userMutation({
   args: toolFields,
   handler: async (ctx, args) => {
+    await enforceRateLimit(ctx, "toolWrite", ctx.user._id)
     return await ctx.db.insert("tools", {
       ownerId: ctx.user._id,
       category: args.category,
@@ -40,6 +42,7 @@ export const update = userMutation({
   args: { toolId: v.id("tools"), ...toolFields },
   handler: async (ctx, { toolId, ...args }) => {
     await requireToolOwner(ctx, toolId)
+    await enforceRateLimit(ctx, "toolWrite", ctx.user._id)
     await ctx.db.patch("tools", toolId, {
       category: args.category,
       condition: args.condition,

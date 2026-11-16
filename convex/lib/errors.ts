@@ -1,6 +1,6 @@
 import { ConvexError } from "convex/values"
 
-export type AppErrorCode = "UNAUTHENTICATED" | "FORBIDDEN" | "NOT_FOUND" | "INVALID" | "CONFLICT"
+export type AppErrorCode = "UNAUTHENTICATED" | "FORBIDDEN" | "NOT_FOUND" | "INVALID" | "CONFLICT" | "RATE_LIMITED"
 
 export type AppErrorData = { code: AppErrorCode; message: string }
 
