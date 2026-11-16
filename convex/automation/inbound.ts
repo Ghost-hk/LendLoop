@@ -28,11 +28,13 @@ export const overdueLoans = internalQuery({
       const borrower = await ctx.db.get("users", loan.borrowerId)
       if (!borrower) continue
       const tool = await ctx.db.get("tools", loan.toolId)
+      const lender = await ctx.db.get("users", loan.lenderId)
 
       results.push({
         loanId: loan._id,
         idempotencyKey,
         borrower: { email: borrower.email, firstName: firstName(borrower.name) },
+        lender: { firstName: lender ? firstName(lender.name) : "A neighbor" },
         toolName: tool?.name ?? "a tool",
         endDate: loan.endDate,
         daysOverdue: daysBetween(loan.endDate, day),

@@ -5,7 +5,7 @@ Every loan status change notifies the right person through n8n, without the muta
 ## Flow
 
 1. **Outbox.** `recordLoanEvent` (already called by every loan transition) inserts a `webhookDeliveries` row in the same transaction as the status change, then schedules the send action. A status change and its notification can never drift apart.
-2. **Send.** `automation/actions.send` loads the delivery, builds the payload from current data, signs it and POSTs it to `N8N_NOTIFY_WEBHOOK_URL` with a 10s timeout.
+2. **Send.** `automation/actions.send` loads the delivery, builds the payload from current data, signs it and POSTs it to `N8N_NOTIFY_WEBHOOK_URL` with a 30s timeout (longer than n8n's own Resend retries, so Convex sees the real result).
 3. **Retries.** 3 retries over about 45 minutes (5m, 10m, 30m). A network error, timeout, 408, 429 or 5xx is retried; any other 4xx (bad signature, bad payload) fails at once, since retrying can't fix it. After the last attempt the row is `failed` with the error kept.
 4. **Idempotency.** Every attempt carries the same `X-LendLoop-Delivery-Id`, so n8n can drop a duplicate when a send succeeded but its response was lost.
 
@@ -29,13 +29,14 @@ Auto-declines (overlapping approval, tool removed) go through the same path, so 
   "loanId": "…",
   "occurredAt": "2026-11-16T10:00:00.000Z",
   "recipient": { "email": "…", "firstName": "Sam" },
+  "counterpart": { "firstName": "Alice" },
   "toolName": "Cordless drill",
   "startDate": "2026-11-20",
   "endDate": "2026-11-22"
 }
 ```
 
-No other person's email, no notes, no internal IDs beyond the loan and delivery. The email is read from `users` at send time and never stored in the outbox row.
+Only the other party's first name (already shown in the app), no other person's email, no notes, no internal IDs beyond the loan and delivery. The email is read from `users` at send time and never stored in the outbox row.
 
 ## Signature
 

@@ -6,7 +6,7 @@ n8n reads overdue loans from Convex and writes back what it did. Every write is 
 
 | Endpoint | Caller | Behavior |
 | --- | --- | --- |
-| `GET /n8n/overdue-loans` | Overdue reminders (daily) | Approved loans with `endDate` before today (UTC). Returns `{ date, loans: [{ loanId, idempotencyKey, borrower { email, firstName }, toolName, endDate, daysOverdue }] }`. Loans already reminded today are left out. |
+| `GET /n8n/overdue-loans` | Overdue reminders (daily) | Approved loans with `endDate` before today (UTC). Returns `{ date, loans: [{ loanId, idempotencyKey, borrower { email, firstName }, lender { firstName }, toolName, endDate, daysOverdue }] }`. Loans already reminded today are left out. |
 | `POST /n8n/reminder-status` | Overdue reminders, per email | `{ loanId, idempotencyKey, status: "sent" \| "failed", error? }`. Upsert on `idempotencyKey`; `failed → sent` upgrades the row; anything else repeated returns `{ duplicate: true }`. The key must be `overdue:<loanId>:<YYYY-MM-DD>` for the same loan. |
 | `POST /n8n/automation-error` | Error workflow | `{ workflow, executionId, message, node?, loanId? }`. Recorded once per `error:<executionId>`. |
 

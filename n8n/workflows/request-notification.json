@@ -1,8 +1,9 @@
 {
-  "name": "LendLoop \u00b7 Request notification",
+  "id": "lendloopNotify01",
+  "name": "LendLoop · Request notification",
   "nodes": [
     {
-      "id": "a1",
+      "id": "webhook",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
@@ -10,7 +11,7 @@
         0,
         0
       ],
-      "webhookId": "lendloop-notify",
+      "webhookId": "5c1f3c0e-2d55-4c4e-9f0a-1e2b3c4d5e01",
       "parameters": {
         "httpMethod": "POST",
         "path": "lendloop-notify",
@@ -21,7 +22,7 @@
       }
     },
     {
-      "id": "a2",
+      "id": "verify-signature",
       "name": "Verify signature",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -30,11 +31,11 @@
         0
       ],
       "parameters": {
-        "jsCode": "const crypto = require('crypto');\n\nconst TOLERANCE_SECONDS = 300;\nconst secret = $env.N8N_WEBHOOK_SECRET;\nconst item = $input.first();\nconst headers = item.json.headers || {};\nconst raw = (await this.helpers.getBinaryDataBuffer(0, 'data')).toString('utf8');\n\nconst reject = (reason) => [{ json: { valid: false, reason } }];\n\nif (!secret) return reject('secret not configured');\nconst header = headers['x-lendloop-signature'] || '';\nconst parts = Object.fromEntries(header.split(',').map((p) => p.split('=', 2)));\nconst timestamp = Number(parts.t);\nif (!parts.v1 || !Number.isInteger(timestamp)) return reject('missing signature');\nif (Math.abs(Date.now() / 1000 - timestamp) > TOLERANCE_SECONDS) return reject('stale timestamp');\n\nconst expected = crypto.createHmac('sha256', secret).update(`${timestamp}.${raw}`).digest();\nconst given = Buffer.from(parts.v1, 'hex');\nif (given.length !== expected.length || !crypto.timingSafeEqual(given, expected)) return reject('bad signature');\n\nconst payload = JSON.parse(raw);\nif (headers['x-lendloop-delivery-id'] !== payload.deliveryId) return reject('delivery id mismatch');\n\nreturn [{ json: { valid: true, payload } }];\n"
+        "jsCode": "const crypto = require('crypto');\n\nconst TOLERANCE_SECONDS = 300;\nconst secret = $env.N8N_WEBHOOK_SECRET;\nconst headers = $input.first().json.headers || {};\nconst raw = (await this.helpers.getBinaryDataBuffer(0, 'data')).toString('utf8');\n\nconst reject = (reason) => [{ json: { valid: false, reason } }];\n\nif (!secret) return reject('secret not configured');\nconst parts = Object.fromEntries(\n  String(headers['x-lendloop-signature'] || '').split(',').map((p) => {\n    const i = p.indexOf('=');\n    return [p.slice(0, i).trim(), p.slice(i + 1).trim()];\n  }),\n);\nconst timestamp = Number(parts.t);\nif (!parts.v1 || !Number.isInteger(timestamp)) return reject('missing signature');\nif (Math.abs(Date.now() / 1000 - timestamp) > TOLERANCE_SECONDS) return reject('stale timestamp');\n\nconst expected = crypto.createHmac('sha256', secret).update(`${timestamp}.${raw}`).digest();\nconst given = Buffer.from(parts.v1, 'hex');\nif (given.length !== expected.length || !crypto.timingSafeEqual(given, expected)) return reject('bad signature');\n\nconst payload = JSON.parse(raw);\nif (headers['x-lendloop-delivery-id'] !== payload.deliveryId) return reject('delivery id mismatch');\n\nreturn [{ json: { valid: true, payload } }];\n"
       }
     },
     {
-      "id": "a3",
+      "id": "valid",
       "name": "Valid?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -52,7 +53,7 @@
           "combinator": "and",
           "conditions": [
             {
-              "id": "c1",
+              "id": "valid-true",
               "leftValue": "={{ $json.valid }}",
               "rightValue": true,
               "operator": {
@@ -67,24 +68,83 @@
       }
     },
     {
-      "id": "a4",
-      "name": "Accept",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.4,
+      "id": "build-email",
+      "name": "Build email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
         660,
         -100
       ],
       "parameters": {
+        "jsCode": "const esc = (s) => String(s ?? '').replace(/[&<>\"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', \"'\": '&#39;' }[c]));\nconst fmt = (iso) => new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });\nconst range = (a, b) => (a === b ? fmt(a) : `${fmt(a)} – ${fmt(b)}`);\nconst appUrl = ($env.APP_URL || '').replace(/\\/$/, '');\n\nfunction layout({ heading, lines, cta, href, tag }) {\n  const body = lines.map((l) => `<p style=\"margin:0 0 12px;font-size:16px;line-height:1.5;color:#1B1B1B\">${l}</p>`).join('');\n  return `<!doctype html><html><body style=\"margin:0;background:#F4F1EA;font-family:Barlow,Arial,sans-serif\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#F4F1EA;padding:24px 12px\"><tr><td align=\"center\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:520px\">\n<tr><td style=\"background:#1B1B1B;padding:14px 20px;border-radius:8px 8px 0 0;font:700 20px 'Barlow Condensed',Arial Narrow,Arial,sans-serif;letter-spacing:.06em;color:#F4C20D\">LENDLOOP</td></tr>\n<tr><td style=\"background:#ffffff;padding:24px 20px;border:1px solid #E2DACB;border-top:0;border-radius:0 0 8px 8px\">\n<span style=\"display:inline-block;background:#E8D2A6;border:1px solid #9E7A4D;border-radius:3px 10px 10px 3px;padding:2px 10px;font:700 12px Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#1B1B1B\">${esc(tag)}</span>\n<h1 style=\"margin:14px 0 12px;font:700 26px/1.15 'Barlow Condensed',Arial Narrow,Arial,sans-serif;text-transform:uppercase;color:#1B1B1B\">${heading}</h1>\n${body}\n<p style=\"margin:20px 0 0\"><a href=\"${href}\" style=\"display:inline-block;background:#F4C20D;color:#1B1B1B;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:6px\">${esc(cta)}</a></p>\n</td></tr>\n<tr><td style=\"padding:14px 4px;font-size:12px;color:#5C5548\">You get this because you lend or borrow on LendLoop. We only email you about your own loans.</td></tr>\n</table></td></tr></table></body></html>`;\n}\nconst toText = ({ heading, lines, cta, href }) =>\n  [heading, '', ...lines.map((l) => l.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#39;/g, \"'\")), '', `${cta}: ${href}`].join('\\n');\n\nconst p = $input.first().json.payload;\nconst who = esc(p.counterpart?.firstName || 'A neighbor');\nconst tool = `<strong>${esc(p.toolName)}</strong>`;\nconst dates = esc(range(p.startDate, p.endDate));\nconst hi = `Hi ${esc(p.recipient.firstName)},`;\n\nconst templates = {\n  requested: {\n    subject: `${p.counterpart?.firstName || 'A neighbor'} wants to borrow your ${p.toolName}`,\n    tag: 'New request', heading: 'Someone wants to borrow your tool',\n    lines: [hi, `${who} asked to borrow your ${tool} for ${dates}.`, 'Approve or decline it from Incoming.'],\n    cta: 'Answer the request', path: '/app/incoming',\n  },\n  approved: {\n    subject: `Approved: ${p.toolName}, ${range(p.startDate, p.endDate)}`,\n    tag: 'Approved', heading: \"You're borrowing it\",\n    lines: [hi, `${who} approved your request for the ${tool}, ${dates}.`, 'Sort out pickup with them, and bring it back by the last day.'],\n    cta: 'See your requests', path: '/app/requests',\n  },\n  declined: {\n    subject: `Not this time: ${p.toolName}`,\n    tag: 'Declined', heading: 'This one did not work out',\n    lines: [hi, `Your request for the ${tool} (${dates}) was declined, or the dates were taken by another loan.`, 'Other neighbors may have something similar on the wall.'],\n    cta: 'Browse the tool wall', path: '/app',\n  },\n  cancelled: {\n    subject: `Request cancelled: ${p.toolName}`,\n    tag: 'Cancelled', heading: 'A request was withdrawn',\n    lines: [hi, `${who} cancelled their request for your ${tool} (${dates}). Nothing to do.`],\n    cta: 'Open Incoming', path: '/app/incoming',\n  },\n  returned: {\n    subject: `Returned: ${p.toolName}`,\n    tag: 'Returned', heading: 'Loan closed',\n    lines: [hi, `${who} marked the ${tool} as returned. Thanks for bringing it back.`],\n    cta: 'See your requests', path: '/app/requests',\n  },\n};\n\nconst t = templates[p.event];\nif (!t) throw new Error(`Unknown event: ${p.event}`);\nconst href = `${appUrl}${t.path}`;\n\nreturn [{\n  json: {\n    deliveryId: p.deliveryId,\n    idempotencyKey: `notify:${p.deliveryId}`,\n    email: {\n      from: $env.RESEND_FROM,\n      to: [p.recipient.email],\n      subject: t.subject,\n      html: layout({ ...t, href }),\n      text: toText({ ...t, href }),\n    },\n  },\n}];\n"
+      }
+    },
+    {
+      "id": "send-via-resend",
+      "name": "Send via Resend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        -100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Idempotency-Key",
+              "value": "={{ $json.idempotencyKey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.email) }}",
+        "options": {
+          "timeout": 15000,
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 600
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lendloopResend01",
+          "name": "Resend API"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "accept",
+      "name": "Accept",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1100,
+        -100
+      ],
+      "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ { ok: true, deliveryId: $json.payload.deliveryId } }}",
+        "responseBody": "={{ { ok: true, deliveryId: $('Build email').first().json.deliveryId } }}",
         "options": {
           "responseCode": 200
         }
       }
     },
     {
-      "id": "a5",
+      "id": "reject",
       "name": "Reject",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
@@ -94,7 +154,7 @@
       ],
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ { ok: false, error: $json.reason } }}",
+        "responseBody": "={{ { ok: false, error: 'unauthorized' } }}",
         "options": {
           "responseCode": 401
         }
@@ -128,7 +188,7 @@
       "main": [
         [
           {
-            "node": "Accept",
+            "node": "Build email",
             "type": "main",
             "index": 0
           }
@@ -141,11 +201,37 @@
           }
         ]
       ]
+    },
+    "Build email": {
+      "main": [
+        [
+          {
+            "node": "Send via Resend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send via Resend": {
+      "main": [
+        [
+          {
+            "node": "Accept",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "timezone": "UTC",
+    "errorWorkflow": "lendloopErrors01"
   },
   "active": false,
-  "id": "lendloopNotify01"
+  "pinData": {}
 }

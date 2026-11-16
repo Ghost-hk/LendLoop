@@ -15,6 +15,8 @@ export const loadDelivery = internalQuery({
     const recipient = await ctx.db.get("users", delivery.recipientId)
     if (!loan || !recipient) return null
     const tool = await ctx.db.get("tools", loan.toolId)
+    const otherId = delivery.recipientId === loan.lenderId ? loan.borrowerId : loan.lenderId
+    const other = await ctx.db.get("users", otherId)
 
     return {
       event: delivery.event,
@@ -22,6 +24,7 @@ export const loadDelivery = internalQuery({
       loanId: loan._id,
       occurredAt: new Date(delivery._creationTime).toISOString(),
       recipient: { email: recipient.email, firstName: firstName(recipient.name) },
+      counterpart: { firstName: other ? firstName(other.name) : "A neighbor" },
       toolName: tool?.name ?? "a tool",
       startDate: loan.startDate,
       endDate: loan.endDate,

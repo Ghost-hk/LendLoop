@@ -3,7 +3,7 @@ import { internalAction } from "../_generated/server"
 import { internal } from "../_generated/api"
 import { signBody } from "./signature"
 
-const TIMEOUT_MS = 10_000
+const TIMEOUT_MS = 30_000
 
 function isRetryableStatus(status: number) {
   return status === 408 || status === 429 || status >= 500

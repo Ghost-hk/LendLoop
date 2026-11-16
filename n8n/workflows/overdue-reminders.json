@@ -1,0 +1,360 @@
+{
+  "id": "lendloopOverdue1",
+  "name": "LendLoop · Overdue reminders",
+  "nodes": [
+    {
+      "id": "daily",
+      "name": "Every day 08:00 UTC",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "run-now",
+      "name": "Run now",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "sign-request",
+      "name": "Sign request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst base = String($env.CONVEX_SITE_URL || '').replace(/\\/$/, '');\nconst path = '/n8n/overdue-loans';\nconst t = Math.floor(Date.now() / 1000);\nconst v1 = crypto.createHmac('sha256', $env.N8N_CONVEX_SECRET).update(`${t}.GET.${path}.`).digest('hex');\nreturn [{ json: { url: base + path, signature: `t=${t},v1=${v1}` } }];\n"
+      }
+    },
+    {
+      "id": "fetch",
+      "name": "Fetch overdue loans",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-LendLoop-Signature",
+              "value": "={{ $json.signature }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 10000
+    },
+    {
+      "id": "one-item-per-loan",
+      "name": "One item per loan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const { loans = [] } = $input.first().json;\nreturn loans.map((loan) => ({ json: loan }));\n"
+      }
+    },
+    {
+      "id": "build-reminder",
+      "name": "Build reminder",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const esc = (s) => String(s ?? '').replace(/[&<>\"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', \"'\": '&#39;' }[c]));\nconst fmt = (iso) => new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });\nconst range = (a, b) => (a === b ? fmt(a) : `${fmt(a)} – ${fmt(b)}`);\nconst appUrl = ($env.APP_URL || '').replace(/\\/$/, '');\n\nfunction layout({ heading, lines, cta, href, tag }) {\n  const body = lines.map((l) => `<p style=\"margin:0 0 12px;font-size:16px;line-height:1.5;color:#1B1B1B\">${l}</p>`).join('');\n  return `<!doctype html><html><body style=\"margin:0;background:#F4F1EA;font-family:Barlow,Arial,sans-serif\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#F4F1EA;padding:24px 12px\"><tr><td align=\"center\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:520px\">\n<tr><td style=\"background:#1B1B1B;padding:14px 20px;border-radius:8px 8px 0 0;font:700 20px 'Barlow Condensed',Arial Narrow,Arial,sans-serif;letter-spacing:.06em;color:#F4C20D\">LENDLOOP</td></tr>\n<tr><td style=\"background:#ffffff;padding:24px 20px;border:1px solid #E2DACB;border-top:0;border-radius:0 0 8px 8px\">\n<span style=\"display:inline-block;background:#E8D2A6;border:1px solid #9E7A4D;border-radius:3px 10px 10px 3px;padding:2px 10px;font:700 12px Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#1B1B1B\">${esc(tag)}</span>\n<h1 style=\"margin:14px 0 12px;font:700 26px/1.15 'Barlow Condensed',Arial Narrow,Arial,sans-serif;text-transform:uppercase;color:#1B1B1B\">${heading}</h1>\n${body}\n<p style=\"margin:20px 0 0\"><a href=\"${href}\" style=\"display:inline-block;background:#F4C20D;color:#1B1B1B;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:6px\">${esc(cta)}</a></p>\n</td></tr>\n<tr><td style=\"padding:14px 4px;font-size:12px;color:#5C5548\">You get this because you lend or borrow on LendLoop. We only email you about your own loans.</td></tr>\n</table></td></tr></table></body></html>`;\n}\nconst toText = ({ heading, lines, cta, href }) =>\n  [heading, '', ...lines.map((l) => l.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#39;/g, \"'\")), '', `${cta}: ${href}`].join('\\n');\n\nreturn $input.all().map(({ json: l }) => {\n  const days = l.daysOverdue === 1 ? '1 day' : `${l.daysOverdue} days`;\n  const t = {\n    tag: `Overdue ${days}`,\n    heading: 'Time to bring it back',\n    lines: [\n      `Hi ${esc(l.borrower.firstName)},`,\n      `The <strong>${esc(l.toolName)}</strong> you borrowed from ${esc(l.lender.firstName)} was due back on ${esc(fmt(l.endDate))}.`,\n      `Please return it, or message ${esc(l.lender.firstName)} if you need a little longer.`,\n    ],\n    cta: 'See your loans',\n    href: `${appUrl}/app/requests`,\n  };\n  return {\n    json: {\n      loanId: l.loanId,\n      idempotencyKey: l.idempotencyKey,\n      email: {\n        from: $env.RESEND_FROM,\n        to: [l.borrower.email],\n        subject: `Reminder: ${l.toolName} was due ${fmt(l.endDate)}`,\n        html: layout(t),\n        text: toText(t),\n      },\n    },\n  };\n});\n"
+      }
+    },
+    {
+      "id": "send-reminder",
+      "name": "Send reminder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Idempotency-Key",
+              "value": "={{ $json.idempotencyKey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.email) }}",
+        "options": {
+          "timeout": 15000,
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 600
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lendloopResend01",
+          "name": "Resend API"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "sign-sent-status",
+      "name": "Sign sent status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        -100
+      ],
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst base = String($env.CONVEX_SITE_URL || '').replace(/\\/$/, '');\nconst path = '/n8n/reminder-status';\nreturn $input.all().map((item, index) => {\n  const body = JSON.stringify({\n    loanId: $('Build reminder').itemMatching(index).json.loanId,\n    idempotencyKey: $('Build reminder').itemMatching(index).json.idempotencyKey,\n    status: 'sent',\n  });\n  const t = Math.floor(Date.now() / 1000);\n  const v1 = crypto.createHmac('sha256', $env.N8N_CONVEX_SECRET).update(`${t}.POST.${path}.${body}`).digest('hex');\n  return { json: { url: base + path, body, signature: `t=${t},v1=${v1}` }, pairedItem: { item: index } };\n});\n"
+      }
+    },
+    {
+      "id": "sign-failed-status",
+      "name": "Sign failed status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        100
+      ],
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst base = String($env.CONVEX_SITE_URL || '').replace(/\\/$/, '');\nconst path = '/n8n/reminder-status';\nreturn $input.all().map((item, index) => {\n  const body = JSON.stringify({\n    loanId: $('Build reminder').itemMatching(index).json.loanId,\n    idempotencyKey: $('Build reminder').itemMatching(index).json.idempotencyKey,\n    status: 'failed',\n    error: String(item.json.error?.message || item.json.error || 'send failed').slice(0, 500),\n  });\n  const t = Math.floor(Date.now() / 1000);\n  const v1 = crypto.createHmac('sha256', $env.N8N_CONVEX_SECRET).update(`${t}.POST.${path}.${body}`).digest('hex');\n  return { json: { url: base + path, body, signature: `t=${t},v1=${v1}` }, pairedItem: { item: index } };\n});\n"
+      }
+    },
+    {
+      "id": "report-sent",
+      "name": "Report sent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1540,
+        -100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-LendLoop-Signature",
+              "value": "={{ $json.signature }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "report-failed",
+      "name": "Report failed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1540,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-LendLoop-Signature",
+              "value": "={{ $json.signature }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    }
+  ],
+  "connections": {
+    "Every day 08:00 UTC": {
+      "main": [
+        [
+          {
+            "node": "Sign request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run now": {
+      "main": [
+        [
+          {
+            "node": "Sign request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign request": {
+      "main": [
+        [
+          {
+            "node": "Fetch overdue loans",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch overdue loans": {
+      "main": [
+        [
+          {
+            "node": "One item per loan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One item per loan": {
+      "main": [
+        [
+          {
+            "node": "Build reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build reminder": {
+      "main": [
+        [
+          {
+            "node": "Send reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send reminder": {
+      "main": [
+        [
+          {
+            "node": "Sign sent status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sign failed status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign sent status": {
+      "main": [
+        [
+          {
+            "node": "Report sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign failed status": {
+      "main": [
+        [
+          {
+            "node": "Report failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "timezone": "UTC",
+    "errorWorkflow": "lendloopErrors01"
+  },
+  "active": false,
+  "pinData": {}
+}

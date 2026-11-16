@@ -1,0 +1,194 @@
+{
+  "id": "lendloopErrors01",
+  "name": "LendLoop · Error handler",
+  "nodes": [
+    {
+      "id": "trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "build-report",
+      "name": "Build report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const { execution = {}, workflow = {} } = $input.first().json;\nconst message = String(execution.error?.message || 'Unknown error').slice(0, 900);\nreturn [{\n  json: {\n    report: {\n      workflow: String(workflow.name || 'unknown').slice(0, 120),\n      executionId: String(execution.id || `noexec-${Date.now()}`),\n      node: execution.lastNodeExecuted ? String(execution.lastNodeExecuted).slice(0, 120) : undefined,\n      message,\n    },\n    executionUrl: execution.url || '',\n  },\n}];\n"
+      }
+    },
+    {
+      "id": "sign-report",
+      "name": "Sign report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        -100
+      ],
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst base = String($env.CONVEX_SITE_URL || '').replace(/\\/$/, '');\nconst path = '/n8n/automation-error';\nreturn $input.all().map((item, index) => {\n  const body = JSON.stringify(item.json.report);\n  const t = Math.floor(Date.now() / 1000);\n  const v1 = crypto.createHmac('sha256', $env.N8N_CONVEX_SECRET).update(`${t}.POST.${path}.${body}`).digest('hex');\n  return { json: { url: base + path, body, signature: `t=${t},v1=${v1}` }, pairedItem: { item: index } };\n});\n"
+      }
+    },
+    {
+      "id": "record-in-lendloop",
+      "name": "Record in LendLoop",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        -100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-LendLoop-Signature",
+              "value": "={{ $json.signature }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "build-alert",
+      "name": "Build alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        100
+      ],
+      "parameters": {
+        "jsCode": "const esc = (s) => String(s ?? '').replace(/[&<>\"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', \"'\": '&#39;' }[c]));\nconst { report, executionUrl } = $('Build report').first().json;\nconst lines = [\n  `Workflow: ${report.workflow}`,\n  `Step: ${report.node || 'unknown'}`,\n  `Execution: ${report.executionId}`,\n  `Error: ${report.message}`,\n];\nreturn [{\n  json: {\n    idempotencyKey: `alert:${report.executionId}`,\n    email: {\n      from: $env.RESEND_FROM,\n      to: [$env.ADMIN_ALERT_EMAIL],\n      subject: `[LendLoop] ${report.workflow} failed at ${report.node || 'unknown step'}`,\n      text: lines.join('\\n') + (executionUrl ? `\\n\\nOpen in n8n: ${executionUrl}` : ''),\n      html: `<pre style=\"font:14px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap\">${esc(lines.join('\\n'))}</pre>` +\n        (executionUrl ? `<p><a href=\"${esc(executionUrl)}\">Open the execution in n8n</a></p>` : ''),\n    },\n  },\n}];\n"
+      }
+    },
+    {
+      "id": "email-admin",
+      "name": "Email admin",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Idempotency-Key",
+              "value": "={{ $json.idempotencyKey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.email) }}",
+        "options": {
+          "timeout": 15000,
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 600
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lendloopResend01",
+          "name": "Resend API"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build report": {
+      "main": [
+        [
+          {
+            "node": "Sign report",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Build alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign report": {
+      "main": [
+        [
+          {
+            "node": "Record in LendLoop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build alert": {
+      "main": [
+        [
+          {
+            "node": "Email admin",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "timezone": "UTC"
+  },
+  "active": false,
+  "pinData": {}
+}
