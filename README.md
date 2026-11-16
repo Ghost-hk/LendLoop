@@ -1,5 +1,8 @@
 # LendLoop
 
+NOTE before we start; pineapple on pizza is fine ... as long you don't do it in front of an Italian
+https://www.facebook.com/reel/1043070738819355
+
 Borrow what you need. Lend what you don't.
 
 LendLoop is a neighborhood tool-lending board. Neighbors hang tools on a shared wall, others request them for a few days, and the lender approves or declines. Emails go out at every step, and borrowers get a reminder when something is overdue.
