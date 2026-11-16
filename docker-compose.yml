@@ -20,8 +20,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    ports:
-      - "5678:5678"
     environment:
       DB_TYPE: postgresdb
       DB_POSTGRESDB_HOST: postgres
@@ -30,7 +28,10 @@ services:
       DB_POSTGRESDB_PASSWORD: ${N8N_DB_PASSWORD}
       N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:?set N8N_ENCRYPTION_KEY}
       WEBHOOK_URL: ${N8N_PUBLIC_URL:-http://localhost:5678/}
+      N8N_EDITOR_BASE_URL: ${N8N_PUBLIC_URL:-http://localhost:5678/}
       N8N_SECURE_COOKIE: ${N8N_SECURE_COOKIE:-false}
+      N8N_PROXY_HOPS: ${N8N_PROXY_HOPS:-0}
+      N8N_RUNNERS_ENABLED: "true"
       GENERIC_TIMEZONE: UTC
       TZ: UTC
       N8N_DIAGNOSTICS_ENABLED: "false"

@@ -1,0 +1,7 @@
+# Local development only: expose n8n on http://localhost:5678.
+# Docker Compose merges this file automatically; Coolify deploys docker-compose.yml alone
+# and routes the domain through its proxy instead.
+services:
+  n8n:
+    ports:
+      - "5678:5678"

@@ -42,4 +42,11 @@ Set as the error workflow on the other two. **Error Trigger** → **Build report
 - [x] Invalid recipient → `reminder_failed` with reason; later rerun upgrades it to `reminder_sent`.
 - [x] Notification failure → n8n 500 → Convex retry scheduled; error workflow records `workflow_error` and emails the admin.
 - [x] Workflow JSON contains no keys, secrets or personal emails.
-- [ ] Deployed on Coolify (moved to the start of Section 9).
+- [x] Deployed on Coolify: `https://n8n.dawdi.dev` (project **LendLoop**, compose resource `lendloop-n8n`). Request email and overdue reminder verified end to end from production n8n.
+
+## Coolify deploy notes
+
+- Coolify deploys `docker-compose.yml` only; `docker-compose.override.yml` (host port 5678) is for local use and is merged automatically by `docker compose`.
+- Domain set on the `n8n` service as `https://n8n.dawdi.dev:5678` (Traefik routes to container port 5678, Let's Encrypt cert).
+- Env set in Coolify: fresh `N8N_DB_PASSWORD` / `N8N_ENCRYPTION_KEY`, the two HMAC secrets (same values as Convex), `NEXT_PUBLIC_CONVEX_SITE_URL`, `RESEND_FROM`, `ADMIN_ALERT_EMAIL`, `APP_URL`, `N8N_PUBLIC_URL`, `N8N_SECURE_COOKIE=true`, `N8N_PROXY_HOPS=1`.
+- Owner account claimed right after the first boot. Credential and workflows loaded through the n8n public API with a short-lived key (deleted after). Imported workflows get new IDs, so the error workflow and credential references were remapped at import.
