@@ -17,11 +17,28 @@ export const metadata: Metadata = {
   description: "Borrow what you need. Lend what you don't. A neighborhood tool-lending board.",
 }
 
+const CONTINUE = "to continue to LendLoop"
+
+const clerkLocalization = {
+  signIn: {
+    start: { title: "Sign in to LendLoop", titleCombined: "Continue to LendLoop" },
+    emailCode: { subtitle: CONTINUE },
+    emailCodeMfa: { subtitle: CONTINUE },
+    emailLink: { subtitle: CONTINUE },
+    emailLinkMfa: { subtitle: CONTINUE },
+    phoneCode: { subtitle: CONTINUE },
+  },
+  signUp: {
+    emailLink: { subtitle: CONTINUE },
+  },
+}
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning className={cn(barlow.variable, barlowCondensed.variable)}>
       <body>
         <ClerkProvider
+          localization={clerkLocalization}
           appearance={{
             variables: {
               colorPrimary: "#1b1b1b",
