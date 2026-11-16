@@ -1,6 +1,10 @@
 import { defineTable } from "convex/server"
 import { v } from "convex/values"
-import { deliveryStatusValidator, loanEventValidator } from "../lib/validators"
+import {
+  automationEventTypeValidator,
+  deliveryStatusValidator,
+  loanEventValidator,
+} from "../lib/validators"
 
 export const webhookDeliveries = defineTable({
   loanId: v.id("loans"),
@@ -15,3 +19,13 @@ export const webhookDeliveries = defineTable({
 })
   .index("by_loan", ["loanId"])
   .index("by_status", ["status"])
+
+export const automationEvents = defineTable({
+  loanId: v.optional(v.id("loans")),
+  type: automationEventTypeValidator,
+  idempotencyKey: v.string(),
+  detail: v.optional(v.string()),
+  updatedAt: v.number(),
+})
+  .index("by_key", ["idempotencyKey"])
+  .index("by_loan", ["loanId"])

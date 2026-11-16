@@ -1,6 +1,7 @@
 import { v } from "convex/values"
 import { internalMutation, internalQuery } from "../_generated/server"
 import { internal } from "../_generated/api"
+import { firstName } from "../users/helpers"
 
 export const RETRY_DELAYS_MS = [5 * 60_000, 10 * 60_000, 30 * 60_000]
 
@@ -20,7 +21,7 @@ export const loadDelivery = internalQuery({
       deliveryId: delivery._id,
       loanId: loan._id,
       occurredAt: new Date(delivery._creationTime).toISOString(),
-      recipient: { email: recipient.email, firstName: recipient.name.split(/\s+/)[0] || "Neighbor" },
+      recipient: { email: recipient.email, firstName: firstName(recipient.name) },
       toolName: tool?.name ?? "a tool",
       startDate: loan.startDate,
       endDate: loan.endDate,

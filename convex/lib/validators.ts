@@ -20,6 +20,8 @@ export const ROLES = ["user", "admin"] as const
 
 export const DELIVERY_STATUSES = ["pending", "sent", "failed"] as const
 
+export const AUTOMATION_EVENT_TYPES = ["reminder_sent", "reminder_failed", "workflow_error"] as const
+
 export const LOAN_EVENTS = ["requested", "approved", "declined", "cancelled", "returned"] as const
 
 export const AUDIT_ACTIONS = [
@@ -43,6 +45,7 @@ export const loanStatusValidator = literals(...LOAN_STATUSES)
 export const roleValidator = literals(...ROLES)
 export const loanEventValidator = literals(...LOAN_EVENTS)
 export const deliveryStatusValidator = literals(...DELIVERY_STATUSES)
+export const automationEventTypeValidator = literals(...AUTOMATION_EVENT_TYPES)
 export const auditActionValidator = literals(...AUDIT_ACTIONS)
 
 export type Category = Infer<typeof categoryValidator>
