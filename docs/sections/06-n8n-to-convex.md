@@ -30,7 +30,7 @@ Method and path are signed so a signature for one endpoint (especially the body-
 - `convex/automation/endpoints.ts`: HTTP actions (signature check, body parsing, validation).
 - `convex/automation/inbound.ts`: internal query/mutations behind the endpoints.
 - `convex/automation/signature.ts`: `verifyRequestSignature`.
-- `convex/dev/internal.ts`: test-only `makeOverdue`. **Delete before submission.**
+- `convex/dev/internal.ts`: test-only `makeOverdue` (internal; used to demo the reminder, see README).
 
 ## Env
 
