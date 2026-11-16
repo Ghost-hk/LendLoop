@@ -42,6 +42,7 @@ export const markSent = internalMutation({
       attempts: delivery.attempts + 1,
       lastStatusCode: statusCode,
       lastError: undefined,
+      nextAttemptAt: undefined,
       sentAt: Date.now(),
     })
   },
@@ -68,11 +69,17 @@ export const recordFailure = internalMutation({
         lastError: error,
         lastStatusCode: statusCode,
         failedAt: Date.now(),
+        nextAttemptAt: undefined,
       })
       return
     }
 
-    await ctx.db.patch("webhookDeliveries", deliveryId, { attempts, lastError: error, lastStatusCode: statusCode })
+    await ctx.db.patch("webhookDeliveries", deliveryId, {
+      attempts,
+      lastError: error,
+      lastStatusCode: statusCode,
+      nextAttemptAt: Date.now() + delay,
+    })
     await ctx.scheduler.runAfter(delay, internal.automation.actions.send, { deliveryId })
   },
 })

@@ -3,6 +3,7 @@ import { ToolGlyph } from "@/components/tools/tool-glyph"
 import { TrustedMark } from "@/components/tools/trusted-mark"
 import { formatRange, isoToday, loanLength } from "@/lib/dates"
 import { cn } from "@/lib/utils"
+import { LoanActivity } from "./loan-activity"
 import { LoanStatusTag } from "./loan-status-tag"
 import type { LoanView } from "./types"
 
@@ -82,6 +83,7 @@ export function LoanRow({
         </p>
       )}
       {actions && <div className="mt-4 flex flex-wrap justify-end gap-2">{actions}</div>}
+      <LoanActivity activity={loan.activity} />
     </li>
   )
 }

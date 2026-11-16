@@ -16,6 +16,7 @@ export const webhookDeliveries = defineTable({
   lastStatusCode: v.optional(v.number()),
   sentAt: v.optional(v.number()),
   failedAt: v.optional(v.number()),
+  nextAttemptAt: v.optional(v.number()),
 })
   .index("by_loan", ["loanId"])
   .index("by_status", ["status"])
@@ -29,3 +30,4 @@ export const automationEvents = defineTable({
 })
   .index("by_key", ["idempotencyKey"])
   .index("by_loan", ["loanId"])
+  .index("by_type", ["type"])

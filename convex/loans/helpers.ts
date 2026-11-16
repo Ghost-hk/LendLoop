@@ -1,5 +1,6 @@
 import type { MutationCtx, QueryCtx } from "../_generated/server"
 import type { Doc, Id } from "../_generated/dataModel"
+import { loanActivity } from "../automation/activity"
 import { recordLoanEvent } from "../automation/events"
 import { rangesOverlap, today } from "../lib/dates"
 
@@ -52,6 +53,7 @@ export function createLoanViewer(ctx: QueryCtx, perspective: Perspective) {
     if (!tools.has(id)) tools.set(id, ctx.db.get("tools", id))
     return tools.get(id)!
   }
+  const nameOf = async (id: Id<"users">) => (await getUser(id))?.name ?? "Former member"
   const party = async (id: Id<"users">) => {
     const user = await getUser(id)
     return { name: user?.name ?? "Former member", trustedLender: user?.trustedLender ?? false }
@@ -77,6 +79,7 @@ export function createLoanViewer(ctx: QueryCtx, perspective: Perspective) {
       },
       lender: perspective === "lender" ? undefined : await party(loan.lenderId),
       borrower: perspective === "borrower" ? undefined : await party(loan.borrowerId),
+      activity: await loanActivity(ctx, loan, perspective, nameOf),
     }
   }
 }

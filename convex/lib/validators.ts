@@ -29,6 +29,7 @@ export const AUDIT_ACTIONS = [
   "trusted_granted",
   "trusted_revoked",
   "role_changed",
+  "delivery_retried",
 ] as const
 
 export const LIMITS = {

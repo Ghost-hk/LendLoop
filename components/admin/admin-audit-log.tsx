@@ -5,6 +5,7 @@ import { api } from "@/convex/_generated/api"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import type { FunctionReturnType } from "convex/server"
+import { eventEmailLabel, isLoanEvent } from "@/lib/activity"
 
 type Entry = FunctionReturnType<typeof api.admin.queries.auditLog>[number]
 
@@ -18,6 +19,11 @@ function describe(entry: Entry) {
       return `Removed Trusted Lender from ${entry.subject}`
     case "role_changed":
       return `Set ${entry.subject}'s role to ${entry.detail}`
+    case "delivery_retried": {
+      const [event, tool] = (entry.detail ?? "").split(" · ")
+      const label = isLoanEvent(event) ? eventEmailLabel(event) : "Email"
+      return `Retried the failed ${label.toLowerCase()} to ${entry.subject ?? "a former member"}${tool ? ` (${tool})` : ""}`
+    }
   }
 }
 
